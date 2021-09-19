@@ -5,7 +5,6 @@ import {
   View,
   Text,
   ScrollView,
-  Image,
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
@@ -20,7 +19,6 @@ const LoginScreen = ({navigation}) => {
   const [userPassword, setUserPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
-  console.log("bueda midur");
   const passwordInputRef = createRef();
 
   /*const handleSubmitPress = () => {
@@ -148,7 +146,6 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   mainBody: {
     flex: 1,
-
   },
   SectionStyle: {
     flexDirection: 'row',
@@ -178,7 +175,7 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     flex: 1,
-    color: 'white',
+    color: 'black',
     paddingLeft: 15,
     paddingRight: 15,
     borderWidth: 1,

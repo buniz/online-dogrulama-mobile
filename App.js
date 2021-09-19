@@ -18,7 +18,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import HomeScreen from "./src/Screens/Home";
-import LoginScreen from "./src/Screens/Login";
+
 
 
 const Section = ({children, title}): Node => {
@@ -56,7 +56,7 @@ const App: () => Node = () => {
 
   return (
     <View style={{flex: 1}}>
-    <LoginScreen/>
+    <HomeScreen/>
     </View>
 
   );
