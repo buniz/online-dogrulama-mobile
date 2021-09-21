@@ -1,51 +1,15 @@
-import React from 'react';
 import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, useColorScheme} from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import HomeScreen from "./src/Screens/Home";
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {createStackNavigator} from '@react-navigation/stack';
+import HomeScreen from './src/Screens/Home';
+import LoginScreen from './src/Screens/Login';
+import VerifyScreen from './src/Screens/Verify';
+import {NavigationContainer} from '@react-navigation/native';
 
-
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+const Stack = createStackNavigator();
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -55,10 +19,16 @@ const App: () => Node = () => {
   };
 
   return (
-    <View style={{flex: 1}}>
-    <HomeScreen/>
-    </View>
-
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Verify" component={VerifyScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
