@@ -1,16 +1,16 @@
 import axios from 'axios';
 
 const isDev = false;
+export const configureAxiosHeaders = token => {
+  axios.defaults.headers.Authorization = token;
+};
 export const useAPI = () => {
-  const token =
-    'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI2MTQwNDY4ZWE3NjhkMTY4MWIzMWFmZDUiLCJleHBpcmVzIjoxNjMyMDY1NTY0MDk2fQ.BkEG8ddv2C4znFkKPd1AFjFLJohYIxIOuJ82APl9bV4';
-
   const defaultHeader = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    ...axios.defaults.headers,
   };
-
+  console.log(defaultHeader);
   const customFetch = ({
     endpoint,
     method = 'GET',
@@ -39,7 +39,7 @@ export const useAPI = () => {
     if (isMultipart) {
       headers['Content-Type'] = 'multipart/form-data';
     }
-    console.log(options);
+
     return axios(url, options)
       .then(response => {
         let data = null;

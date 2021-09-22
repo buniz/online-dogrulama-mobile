@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,15 +9,16 @@ import {
   View,
 } from 'react-native';
 import {useAPI} from '../utils/useApi';
+import {Context} from '../context/AuthContext';
 
 const HomeScreen = ({navigation}) => {
   const {get} = useAPI();
-  //TR71400090
-  const [trackNo, setTrackNo] = React.useState('');
-  const [document, setDocument] = useState({general: [], data: []});
 
+  const [trackNo, setTrackNo] = React.useState('');
+  const [document, setDocument] = useState({information: [], data: []});
+  const {signout} = useContext(Context);
   const searchTrackingNumber = () => {
-    const endpoint = `documents/byTrackingNumber/${trackNo}`;
+    const endpoint = `filledDocuments/byTrackingNumber/${trackNo}`;
     get({endpoint}).then(response => {
       if (response?.status) {
         setDocument(response.document);
@@ -26,6 +27,20 @@ const HomeScreen = ({navigation}) => {
   };
   return (
     <SafeAreaView style={{flex: 1}}>
+      <TouchableOpacity
+        style={{
+          borderRadius: 10,
+          alignItems: 'flex-end',
+          marginTop: 20,
+          marginRight: 20,
+        }}
+        onPress={() => {
+          signout();
+        }}>
+        <Text style={{fontSize: 16, fontWeight: 'bold', color: '#219ebc'}}>
+          Çıkış
+        </Text>
+      </TouchableOpacity>
       <View style={{flex: 1, padding: 20, marginTop: 20}}>
         <View
           style={{
@@ -39,7 +54,6 @@ const HomeScreen = ({navigation}) => {
             onChangeText={trackNo => setTrackNo(trackNo)}
             value={trackNo}
             placeholder="Takip Numarası"
-            keyboardType="numeric"
           />
           <TouchableOpacity
             style={styles.buttonStyle}
@@ -51,31 +65,37 @@ const HomeScreen = ({navigation}) => {
         <ScrollView
           style={{
             width: '100%',
-            marginTop: 100,
+            marginTop: 30,
           }}>
-          {document.general.length ? (
+          {document.information.length ? (
             <>
-              {document.general.map(item => (
+              {document.information.map(item => (
                 <View
                   key={item._id}
-                  style={{display: 'flex', flexDirection: 'row'}}>
-                  <Text style={styles.generalDataKey}>{item.key}</Text>
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                  }}>
+                  <Text style={styles.generalDataKey}>{item.key}:</Text>
                   <Text style={styles.generalDataValue}>{item.value}</Text>
                 </View>
               ))}
               <TouchableOpacity
                 style={{
                   ...styles.buttonStyle,
-                  width: '86%',
-                  backgroundColor: 'red',
+                  width: '82%',
+                  backgroundColor: '#219ebc',
                 }}
                 activeOpacity={0.5}
-                onPress={() =>
+                onPress={() => {
+                  setTrackNo('');
+                  setDocument({information: [], data: []});
                   navigation.navigate('Verify', {
                     data: document.data,
                     documentId: document._id,
-                  })
-                }>
+                  });
+                }}>
                 <Text style={styles.buttonTextStyle}>Doğrula</Text>
               </TouchableOpacity>
             </>
@@ -98,7 +118,7 @@ const styles = StyleSheet.create({
     borderColor: '#dadae8',
   },
   buttonStyle: {
-    backgroundColor: '#7DE24E',
+    backgroundColor: '#90be6d',
     borderWidth: 0,
     color: '#FFFFFF',
     borderColor: '#7DE24E',
@@ -118,12 +138,12 @@ const styles = StyleSheet.create({
   },
   generalDataKey: {
     margin: 10,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   generalDataValue: {
     margin: 10,
-    fontSize: 18,
+    fontSize: 16,
   },
 });
 

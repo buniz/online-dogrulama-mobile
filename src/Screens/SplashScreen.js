@@ -1,37 +1,28 @@
-import React, {useState, useEffect} from 'react';
-import {
-  ActivityIndicator,
-  View,
-  StyleSheet,
-  Image,
-  AsyncStorage
-} from 'react-native';
-
+import React, {useState, useEffect, useContext} from 'react';
+import {ActivityIndicator, View, StyleSheet, Image} from 'react-native';
+import {Context} from '../context/AuthContext';
+import {configureAxiosHeaders} from '../utils/useApi';
 
 const SplashScreen = ({navigation}) => {
   //State for ActivityIndicator animation
   const [animating, setAnimating] = useState(true);
-
+  const {fetch, state} = useContext(Context);
   useEffect(() => {
-    setTimeout(() => {
-      setAnimating(false);
-      //Check if user_id is set or not
-      //If not then send for Authentication
-      //else send to Home Screen
-      AsyncStorage.getItem('user_id').then((value) =>
-        navigation.replace(
-          value === null ? 'Auth' : 'DrawerNavigationRoutes'
-        ),
-      );
-    }, 5000);
+    fetch();
   }, []);
 
+  useEffect(() => {
+    if (!state?.loading) {
+      if (state?.token) {
+        configureAxiosHeaders(state.token);
+        navigation.navigate('Home');
+      } else {
+        navigation.navigate('Login');
+      }
+    }
+  }, [state?.token, state.loading]);
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../Image/aboutreact.png')}
-        style={{width: '90%', resizeMode: 'contain', margin: 30}}
-      />
       <ActivityIndicator
         animating={animating}
         color="#FFFFFF"

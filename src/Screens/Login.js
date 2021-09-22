@@ -1,5 +1,6 @@
-import React, {createRef, useState} from 'react';
+import React, {createRef, useContext, useState} from 'react';
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
@@ -13,24 +14,36 @@ import {
 //import AsyncStorage from '@react-native-community/async-storage';
 import Loader from '../Components/Loader';
 import {useAPI} from '../utils/useApi';
+import {Context} from '../context/AuthContext';
 
 const LoginScreen = ({navigation}) => {
   const {post} = useAPI();
-  const [userName, setUserName] = useState("user");
-  const [password, setUserPassword] = useState('123456');
+  const [userName, setUserName] = useState('');
+  const [password, setUserPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
   const passwordInputRef = createRef();
-
+  const {signin} = useContext(Context);
   const handleSubmit = () => {
+    setLoading(true);
     post({
       endpoint: 'authorization/login',
       body: {username: userName, password},
-    }).then(response => {
-      if (response?.status) {
-        navigation.navigate('Home');
-      }
-    });
+    })
+      .then(response => {
+        if (response?.status) {
+          signin({token: response.token});
+        } else {
+          Alert.alert('Hata', 'Giriş Bilgileri Hatalı', [
+            {
+              text: 'Tekrar Deneyin',
+            },
+          ]);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   return (
     <View style={styles.mainBody}>
@@ -107,7 +120,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonStyle: {
-    backgroundColor: '#7DE24E',
+    backgroundColor: '#90be6d',
     borderWidth: 0,
     color: '#FFFFFF',
     borderColor: '#7DE24E',
