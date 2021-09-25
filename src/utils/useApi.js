@@ -10,7 +10,7 @@ export const useAPI = () => {
     'Content-Type': 'application/json',
     ...axios.defaults.headers,
   };
-  console.log(defaultHeader);
+
   const customFetch = ({
     endpoint,
     method = 'GET',
@@ -21,7 +21,7 @@ export const useAPI = () => {
   }) => {
     const baseUrl = isDev
       ? 'http://localhost:9000/api'
-      : 'https://secret-fortress-62494.herokuapp.com/api';
+      : 'http://95.110.160.174:9000/api';
     let url = `${baseUrl}/${endpoint}`;
 
     const options = {

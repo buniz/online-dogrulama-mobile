@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import {useAPI} from '../utils/useApi';
 import {Context} from '../context/AuthContext';
