@@ -39,7 +39,6 @@ export const useAPI = () => {
     if (isMultipart) {
       headers['Content-Type'] = 'multipart/form-data';
     }
-
     return axios(url, options)
       .then(response => {
         let data = null;
