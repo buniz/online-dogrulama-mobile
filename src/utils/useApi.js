@@ -21,7 +21,7 @@ export const useAPI = () => {
   }) => {
     const baseUrl = isDev
       ? 'http://localhost:9000/api'
-      : 'http://95.110.160.174:9000/api';
+      : 'http://207.154.252.215:9000/api';
     let url = `${baseUrl}/${endpoint}`;
 
     const options = {
